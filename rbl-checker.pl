@@ -89,9 +89,7 @@
 
     # sending email
     if( $action eq 'email' ) {
-        if ( $detected == 0 ) {
-            send_mail( 'All IPs are clear!' );
-        } else {
+        if ( $detected != 0 ) {
             send_mail( $output );
         }
 
