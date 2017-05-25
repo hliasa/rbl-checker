@@ -70,13 +70,17 @@
                 my $reverse_ip = reverse_ip($ip);
                 my $answer = gethostbyname($reverse_ip.'.'.$rbl_address.'.');
                 if( defined $answer ){
+                    my $ptr = gethostbyaddr(inet_aton($ip),AF_INET);
+                    if ( !$ptr ) {
+                        $ptr = 'NO_PTR_FOUND';
+                    }
                     if ($action eq 'email') {
-                        $output .= $ip."\t".gethostbyaddr(inet_aton($ip), AF_INET)."\t".$rbl_name."\t".inet_ntoa($answer)."\t".$rbl_address."\t".$rbl_url."\n";
+                        $output .= $ip."\t".$ptr."\t".$rbl_name."\t".inet_ntoa($answer)."\t".$rbl_address."\t".$rbl_url."\n";
                     } else {
-                        print $ip."\t".gethostbyaddr(inet_aton($ip), AF_INET)."\t".$rbl_name."\t".inet_ntoa($answer)."\t".$rbl_address."\t".$rbl_url."\n";
+                        print $ip."\t".$ptr."\t".$rbl_name."\t".inet_ntoa($answer)."\t".$rbl_address."\t".$rbl_url."\n";
                     }
                     if ($action eq 'slack') {
-                      $output .= $ip."\t".gethostbyaddr(inet_aton($ip), AF_INET)."\t".$rbl_name."\t".inet_ntoa($answer)."\t".$rbl_address."\t".$rbl_url."\n";
+                      $output .= $ip."\t".$ptr."\t".$rbl_name."\t".inet_ntoa($answer)."\t".$rbl_address."\t".$rbl_url."\n";
                     }
                     $detected++;
                 }
